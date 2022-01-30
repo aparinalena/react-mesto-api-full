@@ -1,0 +1,8 @@
+.authorization {
+  font-family: 'Inter', Arial, sans-serif;
+  position: relative;
+  display: flex;
+  margin: 0 auto;
+  max-width: 358px;
+  place-content: center;
+}

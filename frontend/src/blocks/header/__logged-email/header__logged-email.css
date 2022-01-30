@@ -1,0 +1,10 @@
+.header__logged-email {
+  margin: 0;
+  font-size: 18px;
+}
+
+@media screen and (max-width: 425px) {
+  .header__logged-email {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,6 @@
+.popup__register {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 330px;
+}

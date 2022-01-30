@@ -1,0 +1,22 @@
+.footer__paragraph {
+    margin: 0;
+    font-size: 18px;
+    line-height: 22px;
+    color: #545454;
+    max-width: fit-content;
+}
+
+@media (max-width: 768px) {
+    .footer__paragraph {
+        margin-left: calc((100% - 282px)/2);
+        padding: 0;
+    }
+}
+
+@media (max-width: 320px) {
+    .footer__paragraph {
+        font-size: 14px;
+        line-height: 17px;
+        margin-left: 19px;
+    }
+}

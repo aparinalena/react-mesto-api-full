@@ -1,0 +1,12 @@
+.authorization__login-redirect {
+  cursor: pointer;
+  margin: 15px auto;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.authorization__login-redirect:hover {
+  opacity: 0.6;
+}

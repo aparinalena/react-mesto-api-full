@@ -1,0 +1,22 @@
+.profile__container {
+    width: 336px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+@media (max-width: 1024px) {
+    .profile__container {
+        justify-content: unset;
+        gap: 10px;
+        width: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile__container {
+        justify-content: center;
+        width: 282px;
+    }
+}

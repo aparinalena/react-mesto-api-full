@@ -1,0 +1,7 @@
+.popup__error_visible {
+    opacity: 1;
+}
+
+.popup__error_visible:nth-of-type(2) {
+  top: 200px;
+}

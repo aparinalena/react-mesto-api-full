@@ -1,0 +1,14 @@
+.profile__avatar-edit {
+  position: absolute;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  background-size: 25px;
+  background-image: url("../../../images/avatar_button.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  align-self: center;
+  display: none;
+}
