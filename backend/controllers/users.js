@@ -17,9 +17,8 @@ const createUser = (req, res, next) => {
     .then((user) => {
       if (user) {
         throw new ConflictError('Произошла ошибка: Пользователь с таким email уже существует');
-      } else {
-        return bcrypt.hash(password, 10);
       }
+      return bcrypt.hash(password, 10);
     })
     .then((hash) => {
       User.create({
