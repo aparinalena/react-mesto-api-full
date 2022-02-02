@@ -29,19 +29,20 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const [cardId, setCardId] = useState("");
-  const [userLoginData, setUserLoginData] = useState("");
+  // const [userLoginData, setUserLoginData] = useState("");
   const history = useHistory();
 
   useEffect(() => {
+    if (loggedIn === true) {
     Promise.all([api.getCards(), api.getUserInfo()])
       .then(([cards, userData]) => {
         setCards(cards);
-        setCurrentUser(userData);
+        setCurrentUser(userData.user);
       })
       .catch((err) => {
         console.log(err);
-      });
-  }, []);
+      })};
+  }, [loggedIn]);
 
   function handleEditAvatarClick() {
     setIsAvatarPopupOpen(true);
@@ -150,7 +151,7 @@ function App() {
 
   const handleLogin = (data) => {
     const { email, password } = data;
-    setUserLoginData(email);
+    // setUserLoginData(email);
     authorize(email, password)
       .then((res) => {
         if (res.token) {
@@ -174,7 +175,7 @@ function App() {
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            setUserLoginData(res.data.email);
+            history.push("/");
           }
         })
         .catch((err) => {
@@ -182,13 +183,7 @@ function App() {
           console.log(`Произошла ошибка: ${err}`);
         });
     }
-  }, [history, loggedIn]);
-
-  useEffect(() => {
-    if (loggedIn) {
-      history.push("/");
-    }
-  }, [history, loggedIn]);
+  }, [history]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -236,7 +231,6 @@ function App() {
             cards={cards}
             loggedIn={loggedIn}
             logout={handleLogout}
-            userLoginData={userLoginData}
             component={Main}
             onCardLike={handleCardLike}
             onCardDelete={handleTrashClick}
