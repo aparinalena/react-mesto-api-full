@@ -4,6 +4,7 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
+const AuthError = require('../errors/AuthError');
 
 const createUser = (req, res, next) => {
   const {
@@ -11,35 +12,33 @@ const createUser = (req, res, next) => {
     about,
     avatar,
     email,
-    password,
   } = req.body;
-  User.findOne({ email })
-    .then((user) => {
-      if (user) {
-        throw new ConflictError('Произошла ошибка: Пользователь с таким email уже существует');
-      }
-      return bcrypt.hash(password, 10);
-    })
-    .then((hash) => {
-      User.create({
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hash) => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    }))
+    .then(() => res.send({
+      data: {
         name,
         about,
         avatar,
         email,
-        password: hash,
-      })
-        .then(() => {
-          res.send({
-            user: {
-              name,
-              about,
-              avatar,
-              email,
-            },
-          });
-        });
-    })
-    .catch(next);
+      },
+    }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Произошла ошибка: Переданы некорректные данные при создании пользователя'));
+      } else if (err.name === 'MongoServerError') {
+        next(new ConflictError('Произошла ошибка: Пользователь с такой почтой уже зарегистрирован'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 const getUser = (req, res, next) => {
@@ -108,24 +107,15 @@ const updateUserAvatar = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  const { NODE_ENV, JWT_SECRET } = process.env;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
-        { expiresIn: '7d' },
-      );
-      res
-        .cookie('token', token, {
-          maxAge: 3600000 * 24 * 7,
-          httpOnly: true,
-          sameSite: 'none',
-          secure: true,
-        })
-        .send({ token });
+      const { NODE_ENV, JWT_SECRET } = process.env;
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+      res.send({ token });
     })
-    .catch(next);
+    .catch((err) => {
+      next(new AuthError(err.message));
+    });
 };
 
 const getUserData = (req, res, next) => {
