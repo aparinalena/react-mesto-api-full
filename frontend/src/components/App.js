@@ -29,7 +29,7 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const [cardId, setCardId] = useState("");
-  // const [userLoginData, setUserLoginData] = useState("");
+  const [userLoginData, setUserLoginData] = useState("");
   const history = useHistory();
 
   useEffect(() => {
@@ -151,7 +151,7 @@ function App() {
 
   const handleLogin = (data) => {
     const { email, password } = data;
-    // setUserLoginData(email);
+    setUserLoginData(email);
     authorize(email, password)
       .then((res) => {
         if (res.token) {
@@ -175,6 +175,7 @@ function App() {
         .then((res) => {
           if (res) {
             setLoggedIn(true);
+            setUserLoginData(res.data.email);
             history.push("/");
           }
         })
@@ -231,6 +232,7 @@ function App() {
             cards={cards}
             loggedIn={loggedIn}
             logout={handleLogout}
+            userLoginData={userLoginData}
             component={Main}
             onCardLike={handleCardLike}
             onCardDelete={handleTrashClick}
