@@ -10,8 +10,10 @@ export class Api {
 
   getUserInfo() {
     return fetch(this._userUrl, {
+      method: "GET",
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
       },
     }).then(this._checkResponse);
   }
