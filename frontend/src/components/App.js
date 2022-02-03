@@ -29,20 +29,19 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const [cardId, setCardId] = useState("");
-  // const [userLoginData, setUserLoginData] = useState("");
+  const [userLoginData, setUserLoginData] = useState("");
   const history = useHistory();
 
   useEffect(() => {
-    if (loggedIn === true) {
     Promise.all([api.getCards(), api.getUserInfo()])
       .then(([cards, userData]) => {
         setCards(cards);
-        setCurrentUser(userData.user);
+        setCurrentUser(userData);
       })
       .catch((err) => {
         console.log(err);
-      })};
-  }, [loggedIn]);
+      });
+  }, []);
 
   function handleEditAvatarClick() {
     setIsAvatarPopupOpen(true);
@@ -131,12 +130,15 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  const handleRegister = (email, password) => {
-    register(email, password)
-      .then(() => {
+  const handleRegister = (data) => {
+    const { email, password } = data;
+    return register(email, password)
+      .then((res) => {
+        if (res.data) {
           setIsAuth(true);
           openRegisterPopup();
           history.push("/sign-in");
+        }
       })
       .catch((err) => {
         setIsAuth(false);
@@ -146,12 +148,13 @@ function App() {
       });
   };
 
-  const handleLogin = (email, password) => {
-    // setUserLoginData(email);
+  const handleLogin = (data) => {
+    const { email, password } = data;
+    setUserLoginData(email);
     authorize(email, password)
       .then((res) => {
         if (res.token) {
-          localStorage.setItem("token", res.token);
+          localStorage.setItem("jwt", res.token);
           setLoggedIn(true);
           setIsAuth(true);
           history.push("/");
@@ -165,24 +168,32 @@ function App() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("jwt")) {
+      const jwt = localStorage.getItem("jwt");
 
-      getContent(localStorage.token)
-        .then(() => {
+      getContent(jwt)
+        .then((res) => {
+          if (res) {
             setLoggedIn(true);
-            // setUserLoginData(res.data.email);
-            history.push("/");
+            setUserLoginData(res.data.email);
+          }
         })
         .catch((err) => {
-          // setIsTooltipOpen(true);
+          setIsTooltipOpen(true);
           console.log(`Произошла ошибка: ${err}`);
         });
     }
-  }, [history]);
+  }, [history, loggedIn]);
+
+  useEffect(() => {
+    if (loggedIn) {
+      history.push("/");
+    }
+  }, [history, loggedIn]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setLoggedIn(false);
+    localStorage.removeItem("jwt");
+    setIsAuth(false);
     history.push("/sign-in");
   };
 
@@ -226,7 +237,7 @@ function App() {
             cards={cards}
             loggedIn={loggedIn}
             logout={handleLogout}
-            // userLoginData={userLoginData}
+            userLoginData={userLoginData}
             component={Main}
             onCardLike={handleCardLike}
             onCardDelete={handleTrashClick}
