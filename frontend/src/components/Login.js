@@ -16,7 +16,7 @@ function Login({ handleLogin }) {
 
   return (
     <>
-      <Header link="/sign-up" headerText="Регистрация" />
+      <Header link="/signup" headerText="Регистрация" />
       <div className="authorization">
         <form className="authorization__form" onSubmit={handleSubmit}>
           <h2 className="authorization__title">Вход</h2>

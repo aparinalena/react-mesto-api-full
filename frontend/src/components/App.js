@@ -96,7 +96,7 @@ function App() {
   function closeRegisterPopup() {
     setIsTooltipOpen(false);
     if (isAuth) {
-      history.push("/sign-in");
+      history.push("/signin");
     }
   }
 
@@ -137,14 +137,14 @@ function App() {
         if (res.data) {
           setIsAuth(true);
           openRegisterPopup();
-          history.push("/sign-in");
+          history.push("/signin");
         }
       })
       .catch((err) => {
         setIsAuth(false);
         openRegisterPopup();
         console.log(`Произошла ошибка: ${err}`);
-        history.push("/sign-up");
+        history.push("/signup");
       });
   };
 
@@ -194,7 +194,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("jwt");
     setIsAuth(false);
-    history.push("/sign-in");
+    history.push("/signin");
   };
 
   function handleCardLike(card) {
@@ -246,10 +246,10 @@ function App() {
             onAddPlacePopupOpen={handleAddPlaceClick}
             onCardClick={handleCardClick}
           />
-          <Route path="/sign-in">
+          <Route path="/signin">
             <Login handleLogin={handleLogin} />
           </Route>
-          <Route path="/sign-up">
+          <Route path="/signup">
             <Register handleRegister={handleRegister} />
           </Route>
         </Switch>

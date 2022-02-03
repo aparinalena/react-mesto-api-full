@@ -24,7 +24,7 @@ function Main({
         loggedIn={loggedIn}
         login={userLoginData}
         onClick={logout}
-        link="/sign-in"
+        link="/signin"
       />
       <main className="content">
         <section className="profile">
