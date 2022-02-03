@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Switch, useHistory, withRouter } from "react-router-dom";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { register, authorize, getContent } from "../utils/Auth";
+import { register, authorize, getContent, logout } from "../utils/Auth";
 import { api } from "../utils/Api";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -33,6 +33,7 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
+    if (loggedIn) {
     Promise.all([api.getCards(), api.getUserInfo()])
       .then(([cards, userData]) => {
         setCards(cards);
@@ -40,8 +41,8 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-      });
-  }, []);
+      })};
+  }, [loggedIn]);
 
   function handleEditAvatarClick() {
     setIsAvatarPopupOpen(true);
@@ -130,15 +131,12 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  const handleRegister = (data) => {
-    const { email, password } = data;
+  function handleRegister(email, password) {
     return register(email, password)
-      .then((res) => {
-        if (res.data) {
+      .then(() => {
           setIsAuth(true);
           openRegisterPopup();
           history.push("/signin");
-        }
       })
       .catch((err) => {
         setIsAuth(false);
@@ -148,13 +146,10 @@ function App() {
       });
   };
 
-  const handleLogin = (data) => {
-    const { email, password } = data;
-    setUserLoginData(email);
-    authorize(email, password)
+  function handleLogin(email, password) {
+    return authorize(email, password)
       .then((res) => {
-        if (res.token) {
-          localStorage.setItem("jwt", res.token);
+        if (res) {
           setLoggedIn(true);
           setIsAuth(true);
           history.push("/");
@@ -167,35 +162,64 @@ function App() {
       });
   };
 
+  function getAuthUserInfo() {
+    getContent()
+    .then((res) => {
+    setLoggedIn(true);
+    history.push("/");
+    setUserLoginData(res.email);
+  })
+  .catch((err) => console.log(err));
+  }
+
+  // useEffect(() => {
+  //   if (localStorage.getItem("jwt")) {
+  //     const jwt = localStorage.getItem("jwt");
+
+  //     getContent(jwt)
+  //       .then((res) => {
+  //         if (res) {
+  //           setLoggedIn(true);
+  //           setUserLoginData(res.data.email);
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         setIsTooltipOpen(true);
+  //         console.log(`Произошла ошибка: ${err}`);
+  //       });
+  //   }
+  // }, [history, loggedIn]);
+
+  // useEffect(() => {
+  //   if (loggedIn) {
+  //     history.push("/");
+  //   }
+  // }, [history, loggedIn]);
+
   useEffect(() => {
-    if (localStorage.getItem("jwt")) {
-      const jwt = localStorage.getItem("jwt");
-
-      getContent(jwt)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            setUserLoginData(res.data.email);
-          }
-        })
-        .catch((err) => {
-          setIsTooltipOpen(true);
-          console.log(`Произошла ошибка: ${err}`);
-        });
+    const jwt = document.cookie.slice(4);
+    if (jwt) {
+      getAuthUserInfo();
     }
-  }, [history, loggedIn]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loggedIn]);
 
-  useEffect(() => {
-    if (loggedIn) {
-      history.push("/");
+  // const handleLogout = () => {
+  //   localStorage.removeItem("jwt");
+  //   setIsAuth(false);
+  //   history.push("/signin");
+  // };
+
+  function handleLogout() {
+    const jwt = document.cookie.slice(4);
+
+    if (jwt) {
+      logout().then(() => {
+        setLoggedIn(false);
+        history.push("/sign-in");
+      });
     }
-  }, [history, loggedIn]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("jwt");
-    setIsAuth(false);
-    history.push("/signin");
-  };
+  }
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);

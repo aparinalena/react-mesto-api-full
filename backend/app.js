@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const { userValidation, loginValidation } = require('./middlewares/validation');
-const auth = require('./middlewares/auth');
+const { auth } = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -27,10 +27,11 @@ const corsConfig = {
     // 'http://api.mesto.aparinalena.nomoredomains.work',
     // 'https://api.mesto.aparinalena.nomoredomains.work',
   ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  methods: ['OPTIONS', 'GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization', 'Cookie'],
+  exposedHeaders: ['Set-Cookie'],
   credentials: true,
 };
 

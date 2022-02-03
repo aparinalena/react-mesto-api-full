@@ -13,7 +13,7 @@ const createUser = (req, res, next) => {
     avatar,
     email,
   } = req.body;
-  bcrypt
+  return bcrypt
     .hash(req.body.password, 10)
     .then((hash) => User.create({
       name,
@@ -22,7 +22,7 @@ const createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then(() => res.send({
+    .then(() => res.status(200).send({
       data: {
         name,
         about,
@@ -107,15 +107,25 @@ const updateUserAvatar = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
+  const { NODE_ENV, JWT_SECRET } = process.env;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const { NODE_ENV, JWT_SECRET } = process.env;
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-      res.send({ token });
+      if (!token) {
+        throw new AuthError('Ошибка авторизации');
+      }
+      res
+        .status(200)
+        .cookie('jwt', token, {
+          maxAge: 3600000 * 24 * 7,
+          secure: true,
+          sameSite: 'none',
+          domain: '.nomoredomains.rocks',
+        })
+        .send({ message: 'Аутентификация пройдена' })
+        .end();
     })
-    .catch((err) => {
-      next(new AuthError(err.message));
-    });
+    .catch(next);
 };
 
 const getUserData = (req, res, next) => {

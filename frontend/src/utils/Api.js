@@ -1,17 +1,13 @@
 export class Api {
-  constructor({ baseUrl, headers }) {
-    this._baseUrl = baseUrl;
-    this._token = headers["authorization"];
-    this._userUrl = `${this._baseUrl}/users/me`;
-    this._cardsUrl = `${this._baseUrl}/cards`;
-    this._likesUrl = `${this._baseUrl}/cards/likes`;
+  constructor(config) {
+    this.url = config.baseUrl;
+    this.headers = config.headers;
   }
 
   getUserInfo() {
-    return fetch(this._userUrl, {
-      headers: {
-        authorization: this._token,
-      },
+    return fetch(this.url + "/users/me", {
+      credentials: "include",
+      headers: this.headers,
     }).then(this._checkResponse);
   }
 
@@ -30,73 +26,43 @@ export class Api {
   }
 
   getCards() {
-    return fetch(this._cardsUrl, {
-      headers: {
-        authorization: this._token,
-      },
+    return fetch(this.url + "/cards", {
+      credentials: "include",
+      headers: this.headers,
     }).then(this._checkResponse);
   }
 
-  changeAvatar(src) {
-    return fetch(`${this._userUrl}/avatar`, {
+  changeAvatar(data) {
+    return fetch(this.url + "/users/me/avatar", {
       method: "PATCH",
-      headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        avatar: src,
-      }),
+      credentials: "include",
+      headers: this.headers,
+      body: JSON.stringify(data),
     }).then(this._checkResponse);
   }
 
-  postCard(name, link) {
-    return fetch(this._cardsUrl, {
+  postCard(data) {
+    return fetch(this.url + "/cards", {
       method: "POST",
-      headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        link: link,
-      }),
+      credentials: "include",
+      headers: this.headers,
+      body: JSON.stringify(data),
     }).then(this._checkResponse);
   }
 
   deleteCard(cardId) {
-    return fetch(`${this._cardsUrl}/${cardId}`, {
+    return fetch(this.url + `/cards/${cardId}`, {
       method: "DELETE",
-      headers: {
-        authorization: this._token,
-      },
+      credentials: "include",
+      headers: this.headers,
     }).then(this._checkResponse);
   }
 
   changeLikeCardStatus(cardId, isLiked) {
-    return fetch(`${this._likesUrl}/${cardId}`, {
-      method: isLiked ? "PUT" : "DELETE",
-      headers: {
-        authorization: this._token,
-      },
-    }).then((res) => this._checkResponse(res));
-  }
-
-  likedCard(cardId) {
-    return fetch(`${this._likesUrl}/${cardId}`, {
-      method: "PUT",
-      headers: {
-        authorization: this._token,
-      },
-    }).then(this._checkResponse);
-  }
-
-  dislikedCard(cardId) {
-    return fetch(`${this._likesUrl}/${cardId}`, {
-      method: "DELETE",
-      headers: {
-        authorization: this._token,
-      },
+    return fetch(this.url + `/cards/${cardId}/likes`, {
+      method: isLiked ? "DELETE" : "PUT",
+      credentials: "include",
+      headers: this.headers,
     }).then(this._checkResponse);
   }
 
@@ -109,9 +75,12 @@ export class Api {
 }
 
 export const api = new Api({
-  baseUrl: "https://api.mesto.aparinalena.nomoredomains.work",
+  baseUrl:
+    process.env.NODE_ENV === "production"
+      ? "https://api.mesto.aparinalena.nomoredomains.work"
+      : "http://localhost:3000",
   headers: {
-    authorization: "f33c969f-e357-4c49-a4b2-c8ed9c1630fb",
+    Authorization: `Bearer ${document.cookie.slice(4)}`,
     "Content-Type": "application/json",
   },
 });
