@@ -29,7 +29,7 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const [cardId, setCardId] = useState("");
-  const [userLoginData, setUserLoginData] = useState("");
+  // const [userLoginData, setUserLoginData] = useState("");
   const history = useHistory();
 
   useEffect(() => {
@@ -131,15 +131,12 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  const handleRegister = (data) => {
-    const { email, password } = data;
-    return register(email, password)
-      .then((res) => {
-        if (res.data) {
+  const handleRegister = (email, password) => {
+    register(email, password)
+      .then(() => {
           setIsAuth(true);
           openRegisterPopup();
           history.push("/sign-in");
-        }
       })
       .catch((err) => {
         setIsAuth(false);
@@ -149,9 +146,8 @@ function App() {
       });
   };
 
-  const handleLogin = (data) => {
-    const { email, password } = data;
-    setUserLoginData(email);
+  const handleLogin = (email, password) => {
+    // setUserLoginData(email);
     authorize(email, password)
       .then((res) => {
         if (res.token) {
@@ -172,15 +168,13 @@ function App() {
     if (localStorage.getItem("token")) {
 
       getContent(localStorage.token)
-        .then((res) => {
-          if (res) {
+        .then(() => {
             setLoggedIn(true);
-            setUserLoginData(res.data.email);
+            // setUserLoginData(res.data.email);
             history.push("/");
-          }
         })
         .catch((err) => {
-          setIsTooltipOpen(true);
+          // setIsTooltipOpen(true);
           console.log(`Произошла ошибка: ${err}`);
         });
     }
@@ -188,7 +182,7 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsAuth(false);
+    setLoggedIn(false);
     history.push("/sign-in");
   };
 
@@ -232,7 +226,7 @@ function App() {
             cards={cards}
             loggedIn={loggedIn}
             logout={handleLogout}
-            userLoginData={userLoginData}
+            // userLoginData={userLoginData}
             component={Main}
             onCardLike={handleCardLike}
             onCardDelete={handleTrashClick}
