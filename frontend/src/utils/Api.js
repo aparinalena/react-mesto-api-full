@@ -1,7 +1,8 @@
 export class Api {
   constructor({ baseUrl, headers }) {
     this._baseUrl = baseUrl;
-    this._token = headers["authorization"];
+    // this._token = headers["authorization"];
+    this._headers = headers;
     this._userUrl = `${this._baseUrl}/users/me`;
     this._cardsUrl = `${this._baseUrl}/cards`;
     this._likesUrl = `${this._baseUrl}/cards/likes`;
@@ -19,8 +20,8 @@ export class Api {
     return fetch(this._userUrl, {
       method: "PATCH",
       headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         name: name,
@@ -31,8 +32,10 @@ export class Api {
 
   getCards() {
     return fetch(this._cardsUrl, {
+      method: "GET",
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
       },
     }).then(this._checkResponse);
   }
@@ -41,8 +44,8 @@ export class Api {
     return fetch(`${this._userUrl}/avatar`, {
       method: "PATCH",
       headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         avatar: src,
@@ -54,8 +57,8 @@ export class Api {
     return fetch(this._cardsUrl, {
       method: "POST",
       headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         name: name,
@@ -68,7 +71,8 @@ export class Api {
     return fetch(`${this._cardsUrl}/${cardId}`, {
       method: "DELETE",
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
       },
     }).then(this._checkResponse);
   }
@@ -77,7 +81,8 @@ export class Api {
     return fetch(`${this._likesUrl}/${cardId}`, {
       method: isLiked ? "PUT" : "DELETE",
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
       },
     }).then((res) => this._checkResponse(res));
   }
@@ -86,7 +91,8 @@ export class Api {
     return fetch(`${this._likesUrl}/${cardId}`, {
       method: "PUT",
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
       },
     }).then(this._checkResponse);
   }
@@ -95,7 +101,8 @@ export class Api {
     return fetch(`${this._likesUrl}/${cardId}`, {
       method: "DELETE",
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
       },
     }).then(this._checkResponse);
   }
@@ -109,9 +116,5 @@ export class Api {
 }
 
 export const api = new Api({
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-26",
-  headers: {
-    authorization: "f33c969f-e357-4c49-a4b2-c8ed9c1630fb",
-    "Content-Type": "application/json",
-  },
+  baseUrl: "https://api.mesto.aparinalena.nomoredomains.work",
 });
