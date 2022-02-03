@@ -117,5 +117,5 @@ export class Api {
 }
 
 export const api = new Api({
-  baseUrl: "https://api.mesto.aparinalena.nomoredomains.work"
+  baseUrl: "https://api.mesto.aparinalena.nomoredomains.work",
 });

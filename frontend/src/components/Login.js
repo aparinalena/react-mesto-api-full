@@ -2,35 +2,17 @@ import React, { useState } from "react";
 import Header from "./Header";
 
 function Login({ handleLogin }) {
-  // const [authData, setAuthData] = useState({ email: "", password: "" });
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [authData, setAuthData] = useState({ email: "", password: "" });
 
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    handleLogin(authData);
   }
 
-  function handlePasswordChange(e) {
-    setPassword(e.target.value);
+  function handleOnChange(evt) {
+    const { name, value } = evt.target;
+    setAuthData({ ...authData, [name]: value });
   }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    handleLogin(email, password);
-
-    setEmail("");
-    setPassword("");
-  }
-
-  // function handleSubmit(evt) {
-  //   evt.preventDefault();
-  //   handleLogin(authData);
-  // }
-
-  // function handleOnChange(evt) {
-  //   const { name, value } = evt.target;
-  //   setAuthData({ ...authData, [name]: value });
-  // }
 
   return (
     <>
@@ -45,8 +27,8 @@ function Login({ handleLogin }) {
             placeholder="Email"
             minLength="2"
             maxLength="30"
-            value={email}
-            onChange={handleEmailChange}
+            value={authData.email}
+            onChange={handleOnChange}
             required
           />
           <input
@@ -56,8 +38,8 @@ function Login({ handleLogin }) {
             placeholder="Пароль"
             minLength="2"
             maxLength="30"
-            value={password}
-            onChange={handlePasswordChange}
+            value={authData.password}
+            onChange={handleOnChange}
             required
           />
           <button className="authorization__button" type="submit">
