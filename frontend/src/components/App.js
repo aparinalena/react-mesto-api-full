@@ -33,6 +33,7 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
+    if (loggedIn === true) {
     Promise.all([api.getCards(), api.getUserInfo()])
       .then(([cards, userData]) => {
         setCards(cards);
@@ -40,8 +41,8 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-      });
-  }, []);
+      })};
+  }, [loggedIn]);
 
   function handleEditAvatarClick() {
     setIsAvatarPopupOpen(true);
@@ -148,13 +149,12 @@ function App() {
       });
   };
 
-  const handleLogin = (data) => {
-    const { email, password } = data;
+  const handleLogin = (email, password) => {
     setUserLoginData(email);
     authorize(email, password)
-      .then((res) => {
-        if (res.token) {
-          localStorage.setItem("token", res.token);
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
           setLoggedIn(true);
           setIsAuth(true);
           history.push("/");
