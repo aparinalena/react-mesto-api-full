@@ -149,8 +149,8 @@ function App() {
       });
   };
 
-  const handleLogin = (data) => {
-    const { email, password } = data;
+  const handleLogin = (email, password) => {
+    // const { email, password } = data;
     // setUserLoginData(email);
     authorize(email, password)
       .then((data) => {
