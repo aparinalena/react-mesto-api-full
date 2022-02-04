@@ -39,6 +39,7 @@ function Login({ handleLogin }) {
         <form className="authorization__form" onSubmit={handleSubmit}>
           <h2 className="authorization__title">Вход</h2>
           <input
+            id="email"
             type="email"
             className="authorization__input"
             name="email"
@@ -50,6 +51,7 @@ function Login({ handleLogin }) {
             required
           />
           <input
+            id="password"
             type="password"
             className="authorization__input"
             name="password"
