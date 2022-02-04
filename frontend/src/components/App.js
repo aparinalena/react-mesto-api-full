@@ -175,7 +175,7 @@ function App() {
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            setUserLoginData(res.data.email);
+            setUserLoginData(currentUser.email);
           }
         })
         .catch((err) => {
