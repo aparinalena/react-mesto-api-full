@@ -3,6 +3,7 @@ import { Route, Switch, useHistory, withRouter } from "react-router-dom";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { register, authorize, getContent } from "../utils/Auth";
 import { api } from "../utils/Api";
+import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import EditProfilePopup from "./EditProfilePopup";
@@ -24,7 +25,7 @@ function App() {
   const [isRemovePlacePopupOpen, setIsRemovePlacePopupOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
@@ -172,12 +173,10 @@ function App() {
     if (localStorage.getItem("token")) {
 
       getContent(localStorage.token)
-        .then((res) => {
-          if (res) {
+        .then(() => {
             setLoggedIn(true);
             history.push("/");
             // setUserLoginData(currentUser.email);
-          }
         })
         .catch((err) => {
           setIsTooltipOpen(true);
@@ -194,7 +193,7 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsAuth(false);
+    setLoggedIn(false);
     history.push("/signin");
   };
 
@@ -231,14 +230,15 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
+      <Header logout={handleLogout} userLoginData={currentUser.email} />
         <Switch>
           <ProtectedRoute
             exact
             path="/"
             cards={cards}
-            loggedIn={loggedIn}
+            // loggedIn={loggedIn}
             logout={handleLogout}
-            userLoginData={currentUser.email}
+            // userLoginData={currentUser.email}
             component={Main}
             onCardLike={handleCardLike}
             onCardDelete={handleTrashClick}

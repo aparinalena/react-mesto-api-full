@@ -5,8 +5,8 @@ import Header from "./Header";
 
 function Main({
   loggedIn,
-  logout,
-  userLoginData,
+  // logout,
+  // userLoginData,
   cards,
   onEditAvatarPopupOpen,
   onEditProfilePopupOpen,
@@ -22,8 +22,8 @@ function Main({
       <Header
         headerText={"Выйти"}
         loggedIn={loggedIn}
-        login={userLoginData}
-        onClick={logout}
+        // login={userLoginData}
+        // onClick={logout}
         link="/signin"
       />
       <main className="content">

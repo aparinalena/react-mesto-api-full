@@ -13,7 +13,10 @@ export const register = (email, password) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ email, password }),
-  }).then((res) => getResponse(res));
+  }).then((res) => getResponse(res))
+  .then((data) => {
+    return data;
+  });
 };
 
 export const authorize = (email, password) => {
@@ -24,7 +27,10 @@ export const authorize = (email, password) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ email, password }),
-  }).then((res) => getResponse(res));
+  }).then((res) => getResponse(res))
+  .then((data) => {
+    return data;
+  });
 };
 
 export const getContent = (token) => {
@@ -34,5 +40,10 @@ export const getContent = (token) => {
       authorization: `Bearer ${localStorage.getItem('token')}`,
       'Content-Type': 'application/json'
     },
-  }).then((res) => getResponse(res));
+  }).then((res) => getResponse(res))
+  .then((res) => {
+    if (res) {
+      return res;
+    }
+  });
 };

@@ -2,15 +2,15 @@ import React from "react";
 import logo from "../images/header-logo.svg";
 import { Link } from "react-router-dom";
 
-function Header({ login, link, loggedIn, onClick, headerText }) {
+function Header({ link, loggedIn, headerText, logout, userLoginData }) {
   return (
     <header className="header">
       <img className="header__logo" src={logo} alt={"логотип"} />
       <div className="header__logged-info">
-        <p className="header__logged-email">{login}</p>
+        <p className="header__logged-email">{userLoginData}</p>
         <Link
           to={link}
-          onClick={onClick}
+          onClick={logout}
           className={`header__link ${loggedIn && "header__link_logout"}`}
         >
           {headerText}
