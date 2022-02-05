@@ -132,15 +132,12 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  const handleRegister = (data) => {
-    const { email, password } = data;
+  const handleRegister = (email, password) => {
     return register(email, password)
-      .then((res) => {
-        if (res.data) {
+      .then(() => {
           setIsAuth(true);
           openRegisterPopup();
           history.push("/signin");
-        }
       })
       .catch((err) => {
         setIsAuth(false);
