@@ -230,14 +230,19 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-      <Header logout={handleLogout} userLoginData={currentUser.email} />
+      <Header
+        headerText={"Выйти"}
+        loggedIn={loggedIn}
+        link="/signin"
+        logout={handleLogout} 
+        userLoginData={currentUser.email} />
         <Switch>
           <ProtectedRoute
             exact
             path="/"
             cards={cards}
-            // loggedIn={loggedIn}
-            logout={handleLogout}
+            loggedIn={loggedIn}
+            // logout={handleLogout}
             // userLoginData={currentUser.email}
             component={Main}
             onCardLike={handleCardLike}

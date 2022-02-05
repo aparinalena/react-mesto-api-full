@@ -19,13 +19,13 @@ function Main({
 
   return (
     <>
-      <Header
+      {/* <Header
         headerText={"Выйти"}
         loggedIn={loggedIn}
         // login={userLoginData}
         // onClick={logout}
         link="/signin"
-      />
+      /> */}
       <main className="content">
         <section className="profile">
           <div
