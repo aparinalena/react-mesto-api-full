@@ -4,7 +4,6 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const currentUser = React.useContext(CurrentUserContext);
   const isOwn = card.owner === currentUser._id;
-  const like = card.likes;
   const cardDeleteButton = isOwn ? (
     <button
       className="element__trash"
@@ -48,7 +47,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
             onClick={handleLikeClick}
             aria-label="Кнопка лайк"
           ></button>
-          <span className="element__like-counter">{like.length}</span>
+          <span className="element__like-counter">{card.likes.length}</span>
         </div>
       </div>
       {cardDeleteButton}

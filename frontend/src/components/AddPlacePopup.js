@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 function AddPlacePoppup({ isOpen, onClose, onAddPlace }) {
-  const [cardName, setName] = useState("");
-  const [cardLink, setLink] = useState("");
+  const [name, setName] = useState("");
+  const [link, setLink] = useState("");
 
   useEffect(() => {
     setName("");
@@ -19,7 +19,7 @@ function AddPlacePoppup({ isOpen, onClose, onAddPlace }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    onAddPlace({ name: cardName, link: cardLink });
+    onAddPlace({ name, link });
   }
 
   return (
@@ -39,7 +39,7 @@ function AddPlacePoppup({ isOpen, onClose, onAddPlace }) {
         placeholder="Название"
         minLength="2"
         maxLength="30"
-        value={cardName}
+        value={name}
         onChange={handleCardNameChange}
         required
       />
@@ -50,7 +50,7 @@ function AddPlacePoppup({ isOpen, onClose, onAddPlace }) {
         name="link"
         id="link"
         placeholder="Ссылка на картинку"
-        value={cardLink}
+        value={link}
         onChange={handleCardLinkChange}
         required
       />
