@@ -2,7 +2,6 @@ require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
@@ -17,15 +16,18 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+
+mongoose.connect('mongodb://localhost:27017/mestodb', {
+  useNewUrlParser: true,
+});
 
 const corsConfig = {
   origin: [
     'http://localhost:3000',
     'http://mestofront.aparinalena.nomoredomains.work',
     'https://mestofront.aparinalena.nomoredomains.work',
-    'http://api.mesto.aparinalena.nomoredomains.work',
-    'https://api.mesto.aparinalena.nomoredomains.work',
+    // 'http://api.mesto.aparinalena.nomoredomains.work',
+    // 'https://api.mesto.aparinalena.nomoredomains.work',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
@@ -54,8 +56,6 @@ app.use('/cards', require('./routes/cards'));
 app.use((req, res, next) => {
   next(new NotFoundError('Страница не существует'));
 });
-
-mongoose.connect('mongodb://localhost:27017/mestodb', {});
 
 app.use(errorLogger);
 app.use(errors());

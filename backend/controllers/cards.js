@@ -17,13 +17,15 @@ const createCard = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Произошла ошибка: Переданы некорректные данные при создании карточки');
+      } else {
+        next(err);
       }
-    })
-    .catch(next);
+    });
 };
 
 const deleteCard = (req, res, next) => {
-  Card.findById(req.params._id)
+  const { id } = req.params;
+  Card.findById(id)
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Карточка не найдена');
@@ -57,8 +59,7 @@ const likeCard = (req, res, next) => {
       } else {
         next(err);
       }
-    })
-    .catch(next);
+    });
 };
 
 const dislikeCard = (req, res, next) => {
@@ -81,8 +82,7 @@ const dislikeCard = (req, res, next) => {
       } else {
         next(err);
       }
-    })
-    .catch(next);
+    });
 };
 
 module.exports = {

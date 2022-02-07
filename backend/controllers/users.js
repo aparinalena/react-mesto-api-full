@@ -42,7 +42,8 @@ const createUser = (req, res, next) => {
 };
 
 const getUser = (req, res, next) => {
-  User.findById(req.params._id)
+  const { id } = req.params;
+  User.findById(id)
     .then((user) => {
       if (user) {
         return res.send(user);
@@ -55,8 +56,7 @@ const getUser = (req, res, next) => {
       } else {
         next(err);
       }
-    })
-    .catch(next);
+    });
 };
 
 const getUsers = (req, res, next) => {
@@ -80,9 +80,10 @@ const updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Произошла ошибка: Переданы некорректные данные при обновлении профиля');
+      } else {
+        next(err);
       }
-    })
-    .catch(next);
+    });
 };
 
 const updateUserAvatar = (req, res, next) => {
@@ -100,9 +101,10 @@ const updateUserAvatar = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Произошла ошибка: Переданы некорректные данные при обновлении аватара');
+      } else {
+        next(err);
       }
-    })
-    .catch(next);
+    });
 };
 
 const login = (req, res, next) => {

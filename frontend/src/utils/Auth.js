@@ -1,8 +1,11 @@
 export const BASE_URL = "https://api.mesto.aparinalena.nomoredomains.work";
 
-const getResponse = (res) => {
-  return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
-};
+function getResponse(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -12,11 +15,17 @@ export const register = (email, password) => {
       authorization: `Bearer ${localStorage.getItem('token')}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, password }),
-  }).then((res) => getResponse(res))
-  .then((data) => {
-    return data;
-  });
+    body: JSON.stringify({ 
+      password,
+      email, 
+    }),
+  })
+    .then((response) => {
+      return getResponse(response);
+    })
+    .then((data) => {
+      return data;
+    });
 };
 
 export const authorize = (email, password) => {
@@ -26,11 +35,17 @@ export const authorize = (email, password) => {
       authorization: `Bearer ${localStorage.getItem('token')}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, password }),
-  }).then((res) => getResponse(res))
-  .then((data) => {
-    return data;
-  });
+    body: JSON.stringify({
+      password,
+      email,
+    }),
+  })
+    .then((response) => {
+      return getResponse(response);
+    })
+    .then((data) => {
+      return data;
+    });
 };
 
 export const getContent = (token) => {
@@ -40,10 +55,13 @@ export const getContent = (token) => {
       authorization: `Bearer ${localStorage.getItem('token')}`,
       'Content-Type': 'application/json'
     },
-  }).then((res) => getResponse(res))
-  .then((res) => {
-    if (res) {
-      return res;
-    }
-  });
+  })
+    .then((response) => {
+      return getResponse(response);
+    })
+    .then((res) => {
+      if (res) {
+        return res;
+      }
+    });
 };

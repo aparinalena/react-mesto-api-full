@@ -1,21 +1,36 @@
 import React from "react";
 import logo from "../images/header-logo.svg";
-import { Link } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 
-function Header({ link, loggedIn, headerText, logout, userLoginData }) {
+function Header({ loggedIn, logout, userLoginData }) {
   return (
     <header className="header">
       <img className="header__logo" src={logo} alt={"логотип"} />
-      <div className="header__logged-info">
-        <p className="header__logged-email">{userLoginData}</p>
-        <Link
-          to={link}
-          onClick={logout}
-          className={`header__link ${loggedIn && "header__link_logout"}`}
-        >
-          {headerText}
+
+      <Route path="/signin">
+        <Link className="header__link" to="/signup">
+          Регистрация
         </Link>
-      </div>
+      </Route>
+
+      <Route path="/signup">
+        <Link className="header__link" to="/signin">
+          Войти
+        </Link>
+      </Route>
+
+      <Route exact path="/">
+        <div className="header__logged-info">
+          <p className="header__logged-email">{userLoginData}</p>
+          <Link
+            to="/signin"
+            onClick={logout}
+            className={`header__link ${loggedIn && "header__link_logout"}`}
+          >
+            Выйти
+          </Link>
+        </div>
+      </Route>
     </header>
   );
 }

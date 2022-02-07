@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import Header from "./Header";
 import { Link } from "react-router-dom";
 
 function Register({ handleRegister }) {
-  // const [regData, setRegData] = useState({ email: "", password: "" });
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,19 +15,13 @@ function Register({ handleRegister }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    handleRegister(email, password)
-         setEmail("");                 
-         setPassword(""); 
+    handleRegister(email, password);
+    setEmail("");                 
+    setPassword(""); 
   }
-
-  // // function handleOnChange(evt) {
-  // //   const { name, value } = evt.target;
-  // //   setRegData({ ...regData, [name]: value });
-  // }
 
   return (
     <>
-      <Header link="/signin" headerText={"Войти"} />
       <div className="authorization">
         <form className="authorization__form" onSubmit={handleSubmit}>
           <h2 className="authorization__title">Регистрация</h2>

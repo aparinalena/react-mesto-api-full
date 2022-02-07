@@ -1,11 +1,10 @@
 export class Api {
-  constructor({ baseUrl, headers }) {
-    this._baseUrl = baseUrl;
+  constructor(options) {
+    this._baseUrl = options.baseUrl;
     // this._token = headers["authorization"];
-    this._headers = headers;
+    this._headers = options.headers;
     this._userUrl = `${this._baseUrl}/users/me`;
     this._cardsUrl = `${this._baseUrl}/cards`;
-    this._likesUrl = `${this._baseUrl}/cards/likes`;
   }
 
   getUserInfo() {
@@ -15,21 +14,22 @@ export class Api {
         authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
       },
-    }).then(this._checkResponse);
+    }).then((response) => {
+      return this._checkResponse(response);
+    });
   }
 
-  saveUserChanges(name, about) {
+  saveUserChanges(text) {
     return fetch(this._userUrl, {
       method: "PATCH",
       headers: {
         authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        name: name,
-        about: about,
-      }),
-    }).then(this._checkResponse);
+      body: JSON.stringify(text),
+    }).then((response) => {
+      return this._checkResponse(response);
+    });
   }
 
   getCards() {
@@ -39,75 +39,80 @@ export class Api {
         authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
       },
-    }).then(this._checkResponse);
+    }).then((response) => {
+      return this._checkResponse(response);
+    });
   }
 
-  changeAvatar(src) {
+  changeAvatar(url) {
     return fetch(`${this._userUrl}/avatar`, {
       method: "PATCH",
       headers: {
         authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        avatar: src,
-      }),
-    }).then(this._checkResponse);
+      body: JSON.stringify(url),
+    }).then((response) => {
+      return this._checkResponse(response);
+    });
   }
 
-  postCard(name, link) {
+  postCard(text) {
     return fetch(this._cardsUrl, {
       method: "POST",
       headers: {
         authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        name: name,
-        link: link,
-      }),
-    }).then(this._checkResponse);
+      body: JSON.stringify(text),
+    }).then((response) => {
+      return this._checkResponse(response);
+    });
   }
 
-  deleteCard(cardId) {
-    return fetch(`${this._cardsUrl}/${cardId}`, {
+  deleteCard(id) {
+    return fetch(`${this._cardsUrl}/${id}`, {
       method: "DELETE",
       headers: {
         authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
       },
-    }).then(this._checkResponse);
+    }).then((response) => {
+      return this._checkResponse(response);
+    });
   }
 
-  changeLikeCardStatus(cardId, isLiked) {
-    return fetch(`${this._likesUrl}/${cardId}`, {
+  changeLikeCardStatus(id, isLiked) {
+    return fetch(this._baseUrl + `/cards/${id}/likes`, {
       method: isLiked ? "PUT" : "DELETE",
       headers: {
         authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
       },
-    }).then((res) => this._checkResponse(res));
+    }).then((response) => {
+      return this._checkResponse(response);
+    });
   }
 
-  likedCard(cardId) {
-    return fetch(`${this._likesUrl}/${cardId}`, {
-      method: "PUT",
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      },
-    }).then(this._checkResponse);
-  }
+  // likedCard(cardId) {
+  //   return fetch(`${this._likesUrl}/${cardId}`, {
+  //     method: "PUT",
+  //     headers: {
+  //       authorization: `Bearer ${localStorage.getItem('token')}`,
+  //       'Content-Type': 'application/json'
+  //     },
+  //   }).then(this._checkResponse);
+  // }
 
-  dislikedCard(cardId) {
-    return fetch(`${this._likesUrl}/${cardId}`, {
-      method: "DELETE",
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      },
-    }).then(this._checkResponse);
-  }
+  // dislikedCard(cardId) {
+  //   return fetch(`${this._likesUrl}/${cardId}`, {
+  //     method: "DELETE",
+  //     headers: {
+  //       authorization: `Bearer ${localStorage.getItem('token')}`,
+  //       'Content-Type': 'application/json'
+  //     },
+  //   }).then(this._checkResponse);
+  // }
 
   _checkResponse(res) {
     if (res.ok) {

@@ -29,7 +29,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
-  const [cardId, setCardId] = useState("");
+  // const [cardId, setCardId] = useState("");
   // const [userLoginData, setUserLoginData] = useState("");
   const history = useHistory();
 
@@ -57,8 +57,8 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
-  function handleCardClick(props) {
-    setSelectedCard(props);
+  function handleCardClick(card) {
+    setSelectedCard(card);
   }
 
   function handleEscClose(evt) {
@@ -88,23 +88,24 @@ function App() {
     setIsProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsRemovePlacePopupOpen(false);
-    setSelectedCard(null);
-  }
-
-  function openRegisterPopup() {
-    setIsTooltipOpen(!isTooltipOpen);
-  }
-
-  function closeRegisterPopup() {
     setIsTooltipOpen(false);
-    if (isAuth) {
-      history.push("/signin");
-    }
+    setSelectedCard({});
   }
 
-  function handleUpdateUser(user) {
+  // function openRegisterPopup() {
+  //   setIsTooltipOpen(!isTooltipOpen);
+  // }
+
+  // function closeRegisterPopup() {
+  //   setIsTooltipOpen(false);
+  //   if (isAuth) {
+  //     history.push("/signin");
+  //   }
+  // }
+
+  function handleUpdateUser({ name, about }) {
     api
-      .saveUserChanges(user.name, user.about)
+      .saveUserChanges({ name, about })
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -112,9 +113,10 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function handleUpdateAvatar(user) {
+  function handleUpdateAvatar(url) {
+    const data = { avatar: url };
     api
-      .changeAvatar(user.avatar)
+      .changeAvatar(data)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -122,9 +124,9 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function handleAddPlaceSubmit(card) {
+  function handleAddPlaceSubmit(data) {
     api
-      .postCard(card.name, card.link)
+      .postCard(data)
       .then((res) => {
         setCards([res, ...cards]);
         closeAllPopups();
@@ -132,30 +134,27 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  const handleRegister = (email, password) => {
-    return register(email, password)
+  function handleRegister(email, password) {
+    register(email, password)
       .then(() => {
           setIsAuth(true);
-          openRegisterPopup();
+          setIsTooltipOpen(true);
           history.push("/signin");
       })
       .catch((err) => {
         setIsAuth(false);
-        openRegisterPopup();
+        setIsTooltipOpen(true);
         console.log(`Произошла ошибка: ${err}`);
-        history.push("/signup");
       });
   };
 
-  const handleLogin = (email, password) => {
-    // const { email, password } = data;
-    // setUserLoginData(email);
+  function handleLogin(email, password) {
     authorize(email, password)
       .then((data) => {
         if (data.token) {
           localStorage.setItem("token", data.token);
           setLoggedIn(true);
-          setIsAuth(true);
+          // setIsAuth(true);
           history.push("/");
         }
       })
@@ -168,7 +167,6 @@ function App() {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-
       getContent(localStorage.token)
         .then(() => {
             setLoggedIn(true);
@@ -176,7 +174,7 @@ function App() {
             // setUserLoginData(currentUser.email);
         })
         .catch((err) => {
-          setIsTooltipOpen(true);
+          // setIsTooltipOpen(true);
           console.log(`Произошла ошибка: ${err}`);
         });
     }
@@ -195,8 +193,7 @@ function App() {
   };
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-
+    const isLiked = card.likes.some(item => item === currentUser._id);
     api
       .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
@@ -211,9 +208,9 @@ function App() {
 
   function handleCardDelete(card) {
     api
-      .deleteCard(cardId)
+      .deleteCard(card._id)
       .then(() => {
-        setCards(cards.filter((item) => (item._id === cardId ? null : item)));
+        setCards(cards => cards.filter(item => item._id !== card._id));
         closeAllPopups();
       })
       .catch((err) => console.log(err));
@@ -221,16 +218,16 @@ function App() {
 
   const handleTrashClick = (card) => {
     setIsRemovePlacePopupOpen(true);
-    setCardId(card._id);
+    setSelectedCard(card);
   };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
       <Header
-        headerText={"Выйти"}
+        // headerText={"Выйти"}
         loggedIn={loggedIn}
-        link="/signin"
+        // link="/signin"
         logout={handleLogout} 
         userLoginData={currentUser.email} />
         <Switch>
@@ -238,9 +235,6 @@ function App() {
             exact
             path="/"
             cards={cards}
-            loggedIn={loggedIn}
-            // logout={handleLogout}
-            // userLoginData={currentUser.email}
             component={Main}
             onCardLike={handleCardLike}
             onCardDelete={handleTrashClick}
@@ -285,7 +279,7 @@ function App() {
           successedReg="Вы успешно зарегистрировались!"
           failedReg="Что-то пошло не так! Попробуйте ещё раз."
           isOpen={isTooltipOpen}
-          onClose={closeRegisterPopup}
+          onClose={closeAllPopups}
           isRegSuccess={isAuth}
         />
 

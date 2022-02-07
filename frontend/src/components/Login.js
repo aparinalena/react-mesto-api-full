@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import Header from "./Header";
 
 function Login({ handleLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [authData, setAuthData] = useState({ email: "", password: "" });
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -14,33 +12,21 @@ function Login({ handleLogin }) {
     setPassword(e.target.value);
   }
 
-  // function handleSubmit(evt) {
-  //   evt.preventDefault();
-  //   handleLogin(authData);
-  // }
-
   function handleSubmit(e) {
     e.preventDefault();
     handleLogin(email, password);
-
     setEmail("");
     setPassword("");
   }
 
-  // function handleOnChange(evt) {
-  //   const { name, value } = evt.target;
-  //   setAuthData({ ...authData, [name]: value });
-  // }
-
   return (
     <>
-      <Header link="/signup" headerText="Регистрация" />
       <div className="authorization">
         <form className="authorization__form" onSubmit={handleSubmit}>
           <h2 className="authorization__title">Вход</h2>
           <input
             id="email"
-            type="email"
+            type="text"
             className="authorization__input"
             name="email"
             placeholder="Email"

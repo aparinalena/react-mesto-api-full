@@ -1,12 +1,8 @@
 import React from "react";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import Header from "./Header";
 
 function Main({
-  loggedIn,
-  // logout,
-  // userLoginData,
   cards,
   onEditAvatarPopupOpen,
   onEditProfilePopupOpen,
@@ -19,13 +15,6 @@ function Main({
 
   return (
     <>
-      {/* <Header
-        headerText={"Выйти"}
-        loggedIn={loggedIn}
-        // login={userLoginData}
-        // onClick={logout}
-        link="/signin"
-      /> */}
       <main className="content">
         <section className="profile">
           <div
