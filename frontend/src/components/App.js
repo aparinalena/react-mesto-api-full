@@ -182,8 +182,8 @@ function App() {
   }
 
   const handleTrashClick = (card) => {
-    setIsRemovePlacePopupOpen(true);
-    setSelectedCard(card);
+    // setIsRemovePlacePopupOpen(true);
+    // setSelectedCard(card);
   };
 
   function closeAllPopups() {
@@ -260,6 +260,8 @@ function App() {
           onDeleteCard={handleCardDelete}
         />
 
+        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
         <InfoTooltip
           successedReg="Вы успешно зарегистрировались!"
           failedReg="Что-то пошло не так! Попробуйте ещё раз."
@@ -268,7 +270,6 @@ function App() {
           isRegSuccess={isAuth}
         />
 
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
     </CurrentUserContext.Provider>
     </>
