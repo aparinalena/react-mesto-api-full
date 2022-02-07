@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
+const { isURL } = require('validator');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -12,9 +12,8 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator(url) {
-        return validator.isURL(url);
-      },
+      validator: (v) => isURL(v),
+      message: 'Неправильный формат URL',
     },
   },
   owner: {
@@ -33,6 +32,6 @@ const cardSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('card', cardSchema);

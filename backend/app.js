@@ -21,7 +21,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 });
 
-const corsConfig = {
+const options = {
   origin: [
     'http://localhost:3000',
     'http://mestofront.aparinalena.nomoredomains.work',
@@ -36,7 +36,7 @@ const corsConfig = {
   credentials: true,
 };
 
-app.use('*', cors(corsConfig));
+app.use('*', cors(options));
 
 app.use(requestLogger);
 

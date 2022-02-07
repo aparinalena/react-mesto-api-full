@@ -94,26 +94,6 @@ export class Api {
     });
   }
 
-  // likedCard(cardId) {
-  //   return fetch(`${this._likesUrl}/${cardId}`, {
-  //     method: "PUT",
-  //     headers: {
-  //       authorization: `Bearer ${localStorage.getItem('token')}`,
-  //       'Content-Type': 'application/json'
-  //     },
-  //   }).then(this._checkResponse);
-  // }
-
-  // dislikedCard(cardId) {
-  //   return fetch(`${this._likesUrl}/${cardId}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       authorization: `Bearer ${localStorage.getItem('token')}`,
-  //       'Content-Type': 'application/json'
-  //     },
-  //   }).then(this._checkResponse);
-  // }
-
   _checkResponse(res) {
     if (res.ok) {
       return res.json();
@@ -122,6 +102,8 @@ export class Api {
   }
 }
 
-export const api = new Api({
+const api = new Api({
   baseUrl: "https://api.mesto.aparinalena.nomoredomains.work",
 });
+
+export default api;

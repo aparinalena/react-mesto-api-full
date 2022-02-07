@@ -4,17 +4,17 @@ const linkRegExp = /(http:\/\/|https:\/\/)(www)*[a-z0-9\S]*/;
 
 const userValidation = celebrate({
   body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().pattern(linkRegExp),
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
   }),
 });
 
 const userIdValidation = celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().required().hex().length(24),
+    id: Joi.string().alphanum().length(24).hex(),
   }),
 });
 
@@ -40,7 +40,7 @@ const loginValidation = celebrate({
 
 const cardIdValidation = celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().required().hex().length(24),
+    id: Joi.string().alphanum().length(24).hex(),
   }),
 });
 

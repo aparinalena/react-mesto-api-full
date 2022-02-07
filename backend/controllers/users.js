@@ -127,7 +127,7 @@ const login = (req, res, next) => {
 const getUserData = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
-      res.send(user);
+      res.send({ user });
     })
     .catch(next);
 };
