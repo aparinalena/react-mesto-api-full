@@ -128,7 +128,7 @@ function App() {
         console.log(`Произошла ошибка: ${err}`);
       });
   };
-
+  
   function handleCardLike(card) {
     const isLiked = card.likes.some(item => item === currentUser._id);
     api
