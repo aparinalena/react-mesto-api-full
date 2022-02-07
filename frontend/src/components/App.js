@@ -183,7 +183,7 @@ function App() {
 
   const handleTrashClick = (card) => {
     // setIsRemovePlacePopupOpen(true);
-    // setSelectedCard(card);
+    setSelectedCard(card);
   };
 
   function closeAllPopups() {
@@ -194,17 +194,6 @@ function App() {
     setIsTooltipOpen(false);
     setSelectedCard({});
   }
-
-  // function openRegisterPopup() {
-  //   setIsTooltipOpen(!isTooltipOpen);
-  // }
-
-  // function closeRegisterPopup() {
-  //   setIsTooltipOpen(false);
-  //   if (isAuth) {
-  //     history.push("/signin");
-  //   }
-  // }
 
   return (
     <>
