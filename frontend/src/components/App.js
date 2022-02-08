@@ -154,9 +154,9 @@ function App() {
 
   function handleCardDelete(card) {
     api
-      .deleteCard(card._id)
+      .deleteCard(cardId)
       .then(() => {
-        setCards(cards => cards.filter(item => item._id !== card._id));
+        setCards(cards.filter((item) => (item._id === cardId ? null : item)));
       })
       .catch((err) => console.log(err));
   }
