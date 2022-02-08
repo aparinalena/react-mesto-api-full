@@ -19,14 +19,14 @@ export class Api {
     });
   }
 
-  saveUserChanges(text) {
+  saveUserChanges(data) {
     return fetch(this._userUrl, {
       method: "PATCH",
       headers: {
         authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(text),
+      body: JSON.stringify(data),
     }).then((response) => {
       return this._checkResponse(response);
     });
@@ -57,21 +57,21 @@ export class Api {
     });
   }
 
-  postCard(text) {
+  postCard(data) {
     return fetch(this._cardsUrl, {
       method: "POST",
       headers: {
         authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(text),
+      body: JSON.stringify(data),
     }).then((response) => {
       return this._checkResponse(response);
     });
   }
 
-  deleteCard(id) {
-    return fetch(`${this._cardsUrl}/${id}`, {
+  deleteCard(cardId) {
+    return fetch(`${this._cardsUrl}/${cardId}`, {
       method: "DELETE",
       headers: {
         authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -82,8 +82,8 @@ export class Api {
     });
   }
 
-  changeLikeCardStatus(id, isLiked) {
-    return fetch(this._baseUrl + `/cards/${id}/likes`, {
+  changeLikeCardStatus(cardId, isLiked) {
+    return fetch(this._baseUrl + `/cards/${cardId}/likes`, {
       method: isLiked ? "PUT" : "DELETE",
       headers: {
         authorization: `Bearer ${localStorage.getItem('token')}`,

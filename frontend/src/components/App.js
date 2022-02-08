@@ -204,25 +204,25 @@ function App() {
       <Header loggedIn={loggedIn} logout={handleLogout} userLoginData={currentUser.email} />
         <Switch>
           <ProtectedRoute
-            component={Main}
             exact
             path="/"
             cards={cards}
             loggedIn={loggedIn}
+            component={Main}
             onCardLike={handleCardLike}
             onCardDelete={handleTrashClick}
             onEditAvatarPopupOpen={handleEditAvatarClick}
             onEditProfilePopupOpen={handleEditProfileClick}
             onAddPlacePopupOpen={handleAddPlaceClick}
             onCardClick={handleCardClick}
-          ></ProtectedRoute>
+          />
 
           <Route path="/signin">
-            <Login handleLogin={handleLogin} onClose={closeAllPopups}/>
+            <Login handleLogin={handleLogin}/>
           </Route>
 
           <Route path="/signup">
-            <Register handleRegister={handleRegister} onClose={closeAllPopups}/>
+            <Register handleRegister={handleRegister}/>
           </Route>
 
         </Switch>
