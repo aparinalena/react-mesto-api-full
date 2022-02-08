@@ -35,6 +35,7 @@ function Register({ handleRegister }) {
             maxLength="30"
             value={email}
             onChange={handleEmailChange}
+            autoComplete="off"
             required
           />
           <input
@@ -47,6 +48,7 @@ function Register({ handleRegister }) {
             maxLength="30"
             value={password}
             onChange={handlePasswordChange}
+            autoComplete="off"
             required
           />
           <button className="authorization__button" type="submit">
