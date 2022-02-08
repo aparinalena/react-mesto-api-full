@@ -182,7 +182,7 @@ function App() {
   }
 
   const handleTrashClick = (card) => {
-    // setIsRemovePlacePopupOpen(true);
+    setIsRemovePlacePopupOpen(true);
     setSelectedCard(card);
   };
 
