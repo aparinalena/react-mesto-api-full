@@ -157,6 +157,7 @@ function App() {
       .deleteCard(cardId)
       .then(() => {
         setCards(cards.filter((item) => (item._id === cardId ? null : item)));
+        closeAllPopups();
       })
       .catch((err) => console.log(err));
   }
