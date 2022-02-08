@@ -27,6 +27,7 @@ function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
+  const [cardId, setCardId] = useState("");
   const [cards, setCards] = useState([]);
   const history = useHistory();
 
@@ -183,7 +184,7 @@ function App() {
 
   const handleTrashClick = (card) => {
     setIsRemovePlacePopupOpen(true);
-    // setSelectedCard(card);
+    setCardId(card._id);
   };
 
   function closeAllPopups() {
